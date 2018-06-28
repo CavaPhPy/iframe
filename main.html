@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>main</title>
+</head>
+<body>
+<div>
+  <div style="width: 25%; border: 1px solid red; box-sizing: border-box; float: left;">
+    <a target="lky_iframe" data-href="./iframe/default.html" onclick="setIframeUrl(this)"><h2>默认页面</h2></a>
+    <ul>
+      <li>
+        <h3>A</h3>
+        <a target="lky_iframe" data-href="./iframe/APage.html" onclick="setIframeUrl(this)">
+          <ul>跳转到APage</ul>
+        </a>
+      </li>
+      <li>
+        <h3>B</h3>
+        <a target="lky_iframe" data-href="./iframe/BPage.html" onclick="setIframeUrl(this)">
+          <ul>跳转到BPage</ul>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div style="width: 75%; float: left;">
+    <iframe style="width: 100%; height: 100%;" name="lky_iframe" src="./iframe/default.html" frameborder="0"></iframe>
+  </div>
+</div>
+
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+<script>
+    $(function () {
+        var hash = location.hash;
+        if (hash !== '') {
+            var url = hash.substring(1, hash.length);
+            $("[name='lky_iframe']").attr("src", url);
+        }
+    });
+
+    /*点击链接，设置新锚点*/
+    function setIframeUrl(thisDOM) {
+        /*点击时，获取当前的href*/
+        var newAnchor = $(thisDOM).attr("data-href");
+        /*获取当前的URL链接*/
+        var nowUrl = window.location.href;
+        /*去掉旧锚点（获得没有锚点的URL）*/
+        var nowAnchorIndex = nowUrl.indexOf("#");
+        var newUrl = nowUrl.substring(0, nowAnchorIndex);
+        /*设置新的锚点*/
+        window.location.href = newUrl + "#";// 通过设置一个空白锚点过度，解决在浏览器点击前进后退按钮之后，无法正常跳转iframe页面问题，但是页面会有闪动
+        window.location.href = newUrl + "#" + newAnchor;
+    }
+
+    /*iframe跳转*/
+    window.onhashchange = function () {
+        /*location.hash取到的是url链接中锚点的内容(包括#符号)*/
+        var hash = location.hash;
+        /*去掉#号，得到的就是我们要设置到iframe中src上的地址*/
+        var url = hash.substring(1, hash.length);
+        $("[name='lky_iframe']").attr("src", url);
+    };
+</script>
+</body>
+</html>
